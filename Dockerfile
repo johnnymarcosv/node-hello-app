@@ -1,3 +1,4 @@
+# Dockerfile para Azure Container App
 FROM node:22-slim
 
 WORKDIR /app
