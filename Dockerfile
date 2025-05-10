@@ -2,10 +2,10 @@ FROM node:22-slim
 
 WORKDIR /app
 
-COPY . .
+COPY package*.json ./
+RUN npm install
 
-RUN echo 'console.log("Hello from Node inside Docker!")' > index.js
-RUN npm init -y
+COPY . .
 
 EXPOSE 3000
 CMD ["node", "index.js"]
