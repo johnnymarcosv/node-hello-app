@@ -1,0 +1,42 @@
+name: Build and Deploy to Azure Container App
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AZURE_CONTAINER_REGISTRY: ${{ secrets.ACR_LOGIN_SERVER }}
+  RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
+  CONTAINER_APP_NAME: ${{ secrets.CONTAINER_APP_NAME }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t $AZURE_CONTAINER_REGISTRY/nodeapp:latest .
+
+      - name: Login to ACR
+        run: |
+          echo "${{ secrets.AZURE_CREDENTIALS }}" | jq -r .clientSecret | docker login $AZURE_CONTAINER_REGISTRY -u $(echo "${{ secrets.AZURE_CREDENTIALS }}" | jq -r .clientId) --password-stdin
+
+      - name: Push image to ACR
+        run: |
+          docker push $AZURE_CONTAINER_REGISTRY/nodeapp:latest
+
+      - name: Deploy to Azure Container App
+        run: |
+          az containerapp update \
+            --name $CONTAINER_APP_NAME \
+            --resource-group $RESOURCE_GROUP \
+            --image $AZURE_CONTAINER_REGISTRY/nodeapp:latest
