@@ -37,9 +37,10 @@ jobs:
         run: |
           docker push $AZURE_CONTAINER_REGISTRY/nodeapp:latest
 
-      - name: Deploy to Azure Container App
-        run: |
-          az containerapp update \
-            --name $CONTAINER_APP_NAME \
-            --resource-group $RESOURCE_GROUP \
-            --image $AZURE_CONTAINER_REGISTRY/nodeapp:latest
+      - name: Build and deploy Container App
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          acrName: 'acrfinanzassandbox'
+          containerAppName: 'ca-finanzas-bff-sandbox'
+          resourceGroup: 'rg-finanzas-sandbox'
+          imageToDeploy: acrfinanzassandbox.azurecr.io/nodeapp:latest
