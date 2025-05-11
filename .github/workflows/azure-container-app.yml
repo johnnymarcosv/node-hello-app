@@ -7,8 +7,8 @@ on:
 
 env:
   AZURE_CONTAINER_REGISTRY: ${{ secrets.ACR_LOGIN_SERVER }}
-  RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
-  CONTAINER_APP_NAME: ${{ secrets.CONTAINER_APP_NAME }}
+  RESOURCE_GROUP: 'rg-finanzas-sandbox'  # ${{ secrets.RESOURCE_GROUP }}
+  CONTAINER_APP_NAME: 'ca-finanzas-bff-sandbox' # ${{ secrets.CONTAINER_APP_NAME }}
 
 jobs:
   build-and-deploy:
