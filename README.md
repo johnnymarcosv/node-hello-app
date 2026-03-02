@@ -1,2 +1,2 @@
 # node-hello-app
-# vamos a probar si esto funciona o no
+# pruebas de CI/CD con Github Actions
